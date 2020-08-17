@@ -27,8 +27,12 @@
         methods:{
             handleInput(event){
                 this.$emit('input',event.target.value);
+                console.log(this.$attrs);
             }
 
+        },
+        created() {
+            console.log('created',this.$attrs);
         }
     }
 </script>

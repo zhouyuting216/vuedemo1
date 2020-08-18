@@ -39,7 +39,7 @@
     import ZytSelect from "../components/select";
     import test from "../../public/test";
     import Vue from 'vue';
-    import https from "https";
+    // import https from "https";
 
     export default {
         name: 'Home',
@@ -122,8 +122,7 @@
             }
         },
         mounted() {
-            this.getData();
-
+            this.getData('9');
         },
         methods: {
             sortArr(way) {
@@ -140,22 +139,25 @@
                     }
                 }
             },
-            getData() {
-                https.get('examples/data/asset/data/aqi-beijing.json', (res) => {
-                    // console.log('statusCode:', res.statusCode);
-                    // console.log('headers:', res.headers);
-                    // console.log(res)
-                    res.on('data', (d) => {
-                        // console.log('d=',d);
-                        this.options=[];
-                        for (let i = 0; i < 50; i++) {
-                            this.options.push({id:i,name:`${i}-${d[i]}`});
-                        }
-                        this.tempOptions=JSON.parse(JSON.stringify(this.options));
-                    });
-
-                }).on('error', (e) => {
-                    console.error(e);
+            getData(queryStr='') {
+                // https.get('examples/data/asset/data/aqi-beijing.json', (res) => {
+                //     // console.log('statusCode:', res.statusCode);
+                //     // console.log('headers:', res.headers);
+                //     // console.log(res)
+                //     res.on('data', (d) => {
+                //         // console.log('d=',d);
+                //         this.options=[];
+                //         for (let i = 0; i < 50; i++) {
+                //             this.options.push({id:i,name:`${i}-${d[i]}`});
+                //         }
+                //         this.tempOptions=JSON.parse(JSON.stringify(this.options));
+                //     });
+                //
+                // }).on('error', (e) => {
+                //     console.error(e);
+                // });
+                this.$http.get('api/search?input_text='+queryStr,(res)=>{
+                    console.log(res.data);
                 });
             },
             updateSelectedData(selectedData){

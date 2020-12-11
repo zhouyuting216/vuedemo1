@@ -17,14 +17,17 @@
         <button @click="sortArr('desc')" type="button" class="el-button el-button--primary desc-btn"><span>降序</span>
         </button>
         <div class="sort-box">{{sortNum}}</div>
-
+        {{selectedVal}}
         <div v-if="selectedData" style="height: 22px;margin-top: 30px;">{{selectedData}}</div>
         <div v-if="!selectedData" style="height: 22px;"></div>
         <zyt-select
                 v-model="selectedVal"
                 :options="options"
                 :optionProp="optionProp"
-                :is-multiple="false"
+                :is-multiple="true"
+                :filterable="true"
+                :remote="true"
+                :remote-method="getData"
                 width="200"
                 @update-selected-data="updateSelectedData"
         ></zyt-select>
@@ -49,15 +52,7 @@
             HelloWorld
         },
         watch:{
-            selectedVal(newV){
-                this.options = this.tempOptions.filter(item=>{
-                    return item.name.indexOf(newV)>-1;
-                });
 
-                if(this.options.length===0){
-                    this.options.push({id:0,name:'无匹配的数据'});
-                }
-            }
         },
         data() {
             // const https=require(https);
@@ -72,13 +67,24 @@
                     value: 'id',
                     label: 'name',
                 },
-                tempOptions:[],
                 options: [{
-                    id: '选项1',
+                    id: 'id1',
                     name: '黄金糕'
                 }, {
-                    id: '选项2',
+                    id: 'id2',
                     name: '双拼'
+                }, {
+                    id: 'id3',
+                    name: '啊哈'
+                }, {
+                    id: 'id4',
+                    name: '折耳根'
+                }, {
+                    id: 'id5',
+                    name: '泡椒1'
+                }, {
+                    id: 'id6',
+                    name: '凤爪1'
                 }],
 
             }
@@ -122,7 +128,7 @@
             }
         },
         mounted() {
-            this.getData('9');
+            this.getData();
         },
         methods: {
             sortArr(way) {
@@ -140,6 +146,11 @@
                 }
             },
             getData(queryStr='') {
+                this.$http.get('api/search?input_text='+queryStr).then(res=>{
+                    this.options = res.data && res.data.options;
+                }).catch(res=>{
+                    console.log(res);
+                });
                 // https.get('examples/data/asset/data/aqi-beijing.json', (res) => {
                 //     // console.log('statusCode:', res.statusCode);
                 //     // console.log('headers:', res.headers);
@@ -156,9 +167,6 @@
                 // }).on('error', (e) => {
                 //     console.error(e);
                 // });
-                this.$http.get('api/search?input_text='+queryStr,(res)=>{
-                    console.log(res.data);
-                });
             },
             updateSelectedData(selectedData){
                 this.selectedData=selectedData;

@@ -32,7 +32,7 @@
 
         },
         created() {
-            console.log('created',this.$attrs);
+            // console.log('created',this.$attrs);
         }
     }
 </script>

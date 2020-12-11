@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">正整数排序</router-link> |
+      <router-link to="/">树结构</router-link> |
+      <router-link to="/home">正整数排序</router-link> |
       <router-link to="/about">小数排序</router-link>
     </div>
     <router-view/>
